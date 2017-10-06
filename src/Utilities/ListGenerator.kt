@@ -8,11 +8,11 @@ class ListGenerator {
         var rnd = Random()
 
         do {
-            size = rnd.nextInt(3000)
+            size = rnd.nextInt(30)
         } while (size % 2 != 0)
 
         return size
     }
 
-    fun generateIntArray(): IntArray = IntArray(generateSize())
+    fun generateIntArray(): IntArray = IntArray(generateSize()){ Random().nextInt(1000) }
 }

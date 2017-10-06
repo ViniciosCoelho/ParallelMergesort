@@ -1,16 +1,21 @@
 import ParallelMergesort.ParallelMergesort
 import Utilities.ListGenerator
 
+var array : IntArray? = null
+
 fun main(args: Array<String>) {
     val gen = ListGenerator()
-    val array = gen.generateIntArray()
+
+    array = gen.generateIntArray()
 
     println("This is the generated Array:")
-    println(Math.log(1.0/3.0))
+    array!!.forEach { println(it) }
+    // println(Math.log(8.0) / Math.log(2.0))
 
-    //val sorter = ParallelMergesort()
-    // sorter.calculate(array)
+    val sorter = ParallelMergesort()
+    // sorter.calculate(array!!)
 
     println("This is the ordenated Array:")
-    println(array)
+    sorter.calculate(array!!).forEach { println(it) }
+    // array!!.forEach { println(it) }
 }
