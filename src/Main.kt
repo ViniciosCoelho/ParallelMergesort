@@ -1,21 +1,27 @@
 import ParallelMergesort.ParallelMergesort
 import Utilities.ListGenerator
-
-var array : IntArray? = null
+import kotlin.system.measureNanoTime
 
 fun main(args: Array<String>) {
     val gen = ListGenerator()
-
-    array = gen.generateIntArray()
+    val array = gen.generateIntArray()
 
     println("This is the generated Array:")
-    array!!.forEach { println(it) }
-    // println(Math.log(8.0) / Math.log(2.0))
+    array.forEach { println(it) }
 
     val sorter = ParallelMergesort()
-    // sorter.calculate(array!!)
 
-    println("This is the ordenated Array:")
-    sorter.calculate(array!!).forEach { println(it) }
-    // array!!.forEach { println(it) }
+    println("This is the ordenated Array(Parallel):")
+    val parallelTime = measureNanoTime {
+        sorter.calculate(array).forEach { println(it) }
+    }
+
+    println("This is the ordenated Array (Sequential):")
+    val sequentialTime = measureNanoTime {
+        array.sort()
+        array.forEach { println(it) }
+    }
+
+    println("Sequential time = " + sequentialTime + " nanoseconds")
+    println("Parallel time = " + parallelTime + " nanoseconds")
 }
