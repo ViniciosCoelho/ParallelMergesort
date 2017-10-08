@@ -3,16 +3,19 @@ package Utilities
 import java.util.Random
 
 class ListGenerator {
-    private fun generateSize() : Int {
+    private val numMaxRange = 3000
+    private val sizeMaxRange = 1000000
+
+    private fun generateRandomSize() : Int {
         var size : Int
         var rnd = Random()
 
-        do {
-            size = rnd.nextInt(30)
-        } while (size % 2 != 0)
+        do size = rnd.nextInt(sizeMaxRange) while (size % 2 != 0 && size == 0)
 
         return size
     }
 
-    fun generateIntArray(): IntArray = IntArray(generateSize()){ Random().nextInt(1000) }
+    fun generateIntArray(size : Int): IntArray {
+        return IntArray(if (size > 0) size else generateRandomSize()) { Random().nextInt(numMaxRange) }
+    }
 }
