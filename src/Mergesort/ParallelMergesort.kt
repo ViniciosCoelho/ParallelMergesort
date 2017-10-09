@@ -1,4 +1,4 @@
-package ParallelMergesort
+package Mergesort
 
 import java.util.concurrent.Semaphore
 

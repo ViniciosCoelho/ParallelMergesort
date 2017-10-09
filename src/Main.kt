@@ -1,4 +1,4 @@
-import Utilities.mergesort
+import Mergesort.mergesort
 import Utilities.ListGenerator
 import kotlin.system.measureNanoTime
 
@@ -9,15 +9,15 @@ fun main(args: Array<String>) {
     val arrayPar = arraySeq.copyOf()
 
     println("This is the generated Array:")
-    // arraySeq.forEach { println(it) }
+    arraySeq.forEach { println(it) }
 
     println("\nThis is the ordenated Array (Sequential):")
     val sequentialTime = measureNanoTime { arraySeq.mergesort() }
-    // arraySeq.forEach { println(it) }
+    arraySeq.forEach { println(it) }
 
 
     /* println("\nThis is the ordenated Array(Parallel):")
-    val sorter = ParallelMergesort()
+    val sorter = Mergesort()
     val parallelTime = measureNanoTime { sorter.calculate(arrayPar) }
     // arrayPar.forEach { println(it) }
     */
