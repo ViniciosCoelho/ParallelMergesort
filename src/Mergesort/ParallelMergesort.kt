@@ -2,48 +2,56 @@ package Mergesort
 
 import java.util.concurrent.Semaphore
 
-var array : IntArray? = null
+private var array : IntArray? = null
 
-class ParallelMergesort {
-    private val maxLevel = Math.log(Runtime.getRuntime().availableProcessors().toDouble()) / Math.log(2.0)
+private val IntArray.maxProc: Int
+get() = Runtime.getRuntime().availableProcessors()
 
-    private fun parallelCalc(range: IntRange, level : Int) {
+private val IntArray.maxLevel : Int
+get() = (Math.log(maxProc.toDouble()) / Math.log(2.0)).toInt()
+
+private fun IntArray.parallelCalc(init: Int, end: Int, level: Int) {
+    val sem1Next = Semaphore(0)
+    val sem2Next = Semaphore(0)
+
+    val mid: Int = (init + end) / 2
+
+    Thread { parallelSplit(init, mid, level + 1, sem1Next) }.start()
+    Thread { parallelSplit(mid + 1, end, level + 1, sem2Next) }.start()
+
+    sem1Next.acquire()
+    sem2Next.acquire()
+}
+
+private fun IntArray.parallelSplit(init: Int, end: Int, level: Int, semParent: Semaphore) {
+    if (level < maxLevel) {
+        parallelCalc(init, end, level)
+    } else {
+        array!!.mergesort(init, end)
+    }
+
+    semParent.release()
+}
+
+fun IntArray.parallelMergesort() {
+    val size = this.size
+    val end = size - 1
+
+    if (size >= maxProc * 2 ) {
         val sem1Next = Semaphore(0)
         val sem2Next = Semaphore(0)
 
-        val midPos : Int = range.average().toInt()
+        val mid = (end) / 2
 
-        Thread { calculate(0..midPos, level + 1, sem1Next) }.run()
-        Thread { calculate(midPos..range.last, level + 1, sem2Next) }.run()
+        array = this
+
+
+        Thread { parallelSplit(0, mid, 1, sem1Next) }.start()
+        Thread { parallelSplit(mid + 1, end, 1, sem2Next) }.start()
 
         sem1Next.acquire()
         sem2Next.acquire()
     }
 
-    private fun calculate(range: IntRange, level : Int, semParent : Semaphore) {
-        if (level < maxLevel) {
-            parallelCalc(range, level)
-        }
-
-        array!!.sort(range.first, range.last)
-
-        semParent.release()
-    }
-
-    fun calculate(arrayCalc : IntArray) {
-        val sem1Next = Semaphore(0)
-        val sem2Next = Semaphore(0)
-
-        array = arrayCalc
-
-        val mid = array!!.size / 2
-
-        Thread { calculate(0..mid, 0, sem1Next) }.run()
-        Thread { calculate(mid..array!!.size, 0, sem2Next) }.run()
-
-        sem1Next.acquire()
-        sem2Next.acquire()
-
-        array?.sort()
-    }
+    this.mergesort(0, end)
 }

@@ -4,7 +4,7 @@ import java.util.Random
 
 class ListGenerator {
     private val numMaxRange = 3000
-    private val sizeMaxRange = 10
+    private val sizeMaxRange = 1000000
 
     private fun generateRandomSize() : Int {
         var size : Int

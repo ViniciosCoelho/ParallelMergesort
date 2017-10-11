@@ -1,25 +1,25 @@
 package Mergesort
 
-private fun IntArray.mergesort(inicio: Int, fim: Int) {
-    val numElementos = fim - inicio + 1
-    if (numElementos > 2) {
-        val meio = (inicio + fim) / 2
-        mergesort(inicio, meio)
-        mergesort(meio + 1, fim)
-        merge(numElementos, inicio, meio, fim)
-    } else if (numElementos == 2 && this[inicio] > this[fim]) { // entÃ£o, Ã© preciso inverter os dois elementos de v
-        val temp = this[inicio]
-        this[inicio] = this[fim]
-        this[fim] = temp
+internal fun IntArray.mergesort(init : Int, end : Int) {
+    val numElem = end - init + 1
+    if (numElem > 2) {
+        val mid = (init + end) / 2
+        mergesort(init, mid)
+        mergesort(mid + 1, end)
+        merge(numElem, init, mid, end)
+    } else if (numElem == 2 && this[init] > this[end]) {
+        val temp = this[init]
+        this[init] = this[end]
+        this[end] = temp
     }
 }
 
-fun IntArray.merge(numElementos: Int, inicio: Int, meio: Int, fim: Int) {
-    val merged = IntArray(numElementos)
-    var i = inicio
-    var j = meio + 1
+private fun IntArray.merge(numElem : Int, init : Int, mid : Int, end : Int) {
+    val merged = IntArray(numElem)
+    var i = init
+    var j = mid + 1
     var k = 0
-    while (i <= meio && j <= fim) {
+    while (i <= mid && j <= end) {
         if (this[i] < this[j]) {
             merged[k] = this[i]
             i++
@@ -29,18 +29,18 @@ fun IntArray.merge(numElementos: Int, inicio: Int, meio: Int, fim: Int) {
         }
         k++
     }
-    while (i <= meio) {
+    while (i <= mid) {
         merged[k] = this[i]
         i++
         k++
     }
-    while (j <= fim) {
+    while (j <= end) {
         merged[k] = this[j]
         j++
         k++
     }
-    var s = inicio
-    for (r in 0 until numElementos) {
+    var s = init
+    for (r in 0 until numElem) {
         this[s] = merged[r]
         s++
     }
