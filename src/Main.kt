@@ -6,19 +6,25 @@ import kotlin.system.measureTimeMillis
 fun main(args: Array<String>) {
     val gen = ListGenerator()
 
-    val arraySeq = gen.generateIntArray(67108864)
+    println("Insert size (0 >= size will be randomized):")
+    val size = readLine()!!.toInt()
+
+    val arraySeq = gen.generateIntArray(size)
     val arrayPar = arraySeq.copyOf()
 
+    val sequentialTime = measureTimeMillis({ arraySeq.mergesort() })
+    val parallelTime = measureTimeMillis({ arrayPar.parallelMergesort() })
+
+    /*
     println("This is the generated Array:")
-    // arraySeq.forEach({ print("$it ") })
+    arraySeq.forEach({ print("$it ") })
 
     println("\n\nThis is the ordenated Array (Sequential):")
-    val sequentialTime = measureTimeMillis({ arraySeq.mergesort() })
-    // arraySeq.forEach({ print("$it ") })
+    arraySeq.forEach({ print("$it ") })
 
     println("\n\nThis is the ordenated Array(Parallel):")
-    val parallelTime = measureTimeMillis({ arrayPar.parallelMergesort() })
-    // arrayPar.forEach({ print("$it ") })
+    arrayPar.forEach({ print("$it ") })
+    */
 
     println("\n\nFinal times:")
     println("Sequential time = " + sequentialTime + " ms")
