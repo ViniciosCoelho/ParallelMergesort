@@ -16,8 +16,8 @@ private fun IntArray.parallelCalc(init: Int, end: Int, level: Int) {
 
     val mid: Int = (init + end) / 2
 
-    Thread { parallelSplit(init, mid, level + 1, sem1Next) }.start()
-    Thread { parallelSplit(mid + 1, end, level + 1, sem2Next) }.start()
+    Thread(p0 = { parallelSplit(init, mid, level + 1, sem1Next) }).start()
+    Thread(p0 = { parallelSplit(mid + 1, end, level + 1, sem2Next) }).start()
 
     sem1Next.acquire()
     sem2Next.acquire()
@@ -46,8 +46,8 @@ fun IntArray.parallelMergesort() {
         array = this
 
 
-        Thread { parallelSplit(0, mid, 1, sem1Next) }.start()
-        Thread { parallelSplit(mid + 1, end, 1, sem2Next) }.start()
+        Thread(p0 = { parallelSplit(0, mid, 1, sem1Next) }).start()
+        Thread({ parallelSplit(mid + 1, end, 1, sem2Next) }).start()
 
         sem1Next.acquire()
         sem2Next.acquire()
