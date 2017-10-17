@@ -1,32 +1,19 @@
-import Mergesort.mergesort
-import Mergesort.parallelMergesort
-import Utilities.ListGenerator
-import kotlin.system.measureTimeMillis
+import Utilities.TestController
 
 fun main(args: Array<String>) {
-    val gen = ListGenerator()
+    val test = TestController
 
-    println("Insert size (0 >= size will be randomized):")
-    val size = readLine()!!.toInt()
+    do {
+        println("Insert Y\\N for manual test (\"Q\" to exit):")
+        val opt = readLine()!!
 
-    val arraySeq = gen.generateIntArray(size)
-    val arrayPar = arraySeq.copyOf()
+        if (opt.equals("Y", true)) {
+            println("Insert size (0 >= size will be randomized):")
+            val size = readLine()!!.toInt()
 
-    val sequentialTime = measureTimeMillis({ arraySeq.mergesort() })
-    val parallelTime = measureTimeMillis({ arrayPar.parallelMergesort() })
-
-    /*
-    println("This is the generated Array:")
-    arraySeq.forEach({ print("$it ") })
-
-    println("\n\nThis is the ordenated Array (Sequential):")
-    arraySeq.forEach({ print("$it ") })
-
-    println("\n\nThis is the ordenated Array(Parallel):")
-    arrayPar.forEach({ print("$it ") })
-    */
-
-    println("\n\nFinal times:")
-    println("Sequential time = " + sequentialTime + " ms")
-    println("Parallel time   = " + parallelTime + " ms")
+            test.startManualTest(size)
+        } else if (opt.equals("N", true)) {
+            test.startGeneralTest()
+        }
+    } while (!opt.equals("Q", true))
 }

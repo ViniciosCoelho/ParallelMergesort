@@ -1,6 +1,7 @@
 package Mergesort
 
 import java.util.concurrent.Semaphore
+import kotlin.concurrent.thread
 
 private var array : IntArray? = null
 
@@ -16,8 +17,8 @@ private fun IntArray.parallelCalc(init: Int, end: Int, level: Int) {
 
     val mid: Int = (init + end) / 2
 
-    Thread(p0 = { parallelSplit(init, mid, level + 1, sem1Next) }).start()
-    Thread(p0 = { parallelSplit(mid + 1, end, level + 1, sem2Next) }).start()
+    thread (true) { parallelSplit(init, mid, level + 1, sem1Next) }
+    thread(true) { parallelSplit(mid + 1, end, level + 1, sem2Next) }
 
     sem1Next.acquire()
     sem2Next.acquire()
@@ -37,20 +38,9 @@ fun IntArray.parallelMergesort() {
     val size = this.size
     val end = size - 1
 
-    if (size >= maxProc * 2 ) {
-        val sem1Next = Semaphore(0)
-        val sem2Next = Semaphore(0)
-
-        val mid = (end) / 2
-
+    if (size >= maxProc * 2) {
         array = this
-
-
-        Thread(p0 = { parallelSplit(0, mid, 1, sem1Next) }).start()
-        Thread({ parallelSplit(mid + 1, end, 1, sem2Next) }).start()
-
-        sem1Next.acquire()
-        sem2Next.acquire()
+        parallelCalc(0, end, 1)
     }
 
     this.mergesort(0, end)
