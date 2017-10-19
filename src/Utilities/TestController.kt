@@ -6,7 +6,6 @@ import kotlin.system.measureTimeMillis
 
 object TestController {
     private val gen = ListGenerator()
-    private val fileHandler = CSVBuilder()
 
     fun startManualTest(size : Int) {
         val arraySeq = gen.generateRndIntArray(size)
@@ -28,30 +27,21 @@ object TestController {
         arrayPar.forEach({ print("$it ") })
         */
 
-        println("\n\nFinal times:")
+        println("\nFinal times:")
         println("Sequential time = " + sequentialTime + " ms")
         println("Parallel time   = " + parallelTime + " ms")
     }
 
     fun startGeneralTest() {
-        val times = HashMap<Long, Long>()
-
         println("Starting process...")
 
         for (n in 15..26) {
             val size= Math.pow(2.0, n.toDouble()).toInt()
+            println("\nSize = $size")
 
-            val arraySeq = gen.generateRndIntArray(size)
-            val arrayPar = arraySeq.copyOf()
-
-            val sequentialTime = measureTimeMillis({ arraySeq.mergesort() })
-            val parallelTime = measureTimeMillis({ arrayPar.parallelMergesort() })
-
-            times.put(sequentialTime, parallelTime)
+            startManualTest(size)
         }
 
-        println("Creating CSV...")
-        fileHandler.createCSV(times)
-        println("Process finished!")
+        println("\nProcess finished!")
     }
 }
