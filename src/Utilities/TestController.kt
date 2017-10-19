@@ -37,8 +37,8 @@ object TestController {
 
         for (n in 15..26) {
             val size= Math.pow(2.0, n.toDouble()).toInt()
-            println("\nSize = $size")
 
+            println("\nSize = $size")
             startManualTest(size)
         }
 
